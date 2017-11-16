@@ -6,11 +6,15 @@ var port = process.env.PORT || 8000;
 
 app.disable('x-powered-by');
 
-app.use(function(req, res) {
+app.get('/guests', function(req, res) {
   var guests = ['Mary', 'Don'];
   res.send(guests);
 });
 
+app.use(function(req, res) {
+  res.sendStatus(404).json({error: "404 not found"});
+})
+
 app.listen(port, function() {
-  console.log('Listening on port', port);
+  console.log(`listening on port ${port}`)
 });
