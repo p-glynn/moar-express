@@ -15,14 +15,34 @@ app.get('/guests', function(req, res) {
       console.error(err.stack);
       return res.sendStatus(500);
     }
-  var guests = JSON.parse(guestsJSON);
-  res.send(guests);
-})
+    var guests = JSON.parse(guestsJSON);
+    res.send(guests);
+  });
+});
+
+app.get('/guests/:id', function (req, res, next) {
+  fs.readFile(guestsPath, 'utf8', function(err, guestsJSON) {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(404);
+    }
+
+    var id = Number.parseInt(req.params.id);
+    var guests = JSON.parse(guestsJSON);
+
+    if (id < 0 || id >= guests.length || Number.isNaN(id)) {
+      return res.sendStatus(404);
+    }
+    res.set('Content-Type', 'text/plain');
+    res.send(guests[id]);
+  });
 });
 
 app.use(function(req, res) {
-  res.sendStatus(404).json({error: "404 not found"});
-})
+  res.sendStatus(404).json({
+    error: "404 not found"
+  });
+});
 
 app.listen(port, function() {
   console.log(`listening on port ${port}`)
