@@ -38,6 +38,10 @@ app.get('/guests/:id', function (req, res, next) {
   });
 });
 
+app.get('/hello/:name', function (req, res) {
+  res.send(`Hello ${req.params.name}`)
+})
+
 app.use(function(req, res) {
   res.sendStatus(404).json({
     error: "404 not found"
